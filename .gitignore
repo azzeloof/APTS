@@ -1,5 +1,5 @@
 config.py
-#messageLog.data
+messageLog.data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
