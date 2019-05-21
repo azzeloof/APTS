@@ -71,12 +71,39 @@ def callback(packet):
             print('\n')
 
 
+welcomeMsg = """
+##############################################################
+###                       _____ _______ _____              ###
+###                 /\   |  __ \__   __/ ____|             ###
+###                /  \  | |__) | | | | (___               ###
+###               / /\ \ |  ___/  | |  \___ \              ###
+###              / ____ \| |      | |  ____) |             ###
+###             /_/    \_\_|      |_| |_____/              ###
+###            Automatic Packet Tweeting System            ###
+###                  Adam Zeloof / KD2MRG                  ### 
+###                 http://adam.zeloof.xyz                 ###
+############################################################## 
+
+"""
+print(welcomeMsg)
+
+
 # Initialize Twitter interface
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret) 
-twitter = tweepy.API(auth) 
+try:
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret) 
+    twitter = tweepy.API(auth) 
+except:
+    print('Could not initialize Twitter interface.')
 
 # Initialize APRS interface
-AIS = aprslib.IS(callsign)
-AIS.connect()
+try:
+    AIS = aprslib.IS(callsign)
+    AIS.connect()
+    twitter = tweepy.API(auth) 
+except:
+    print('Could not initialize APRS interface.')
+
+print('APTS is listening for messages sent to ' + callsign + '-10.')
 AIS.consumer(callback, raw=False)
+
