@@ -39,13 +39,13 @@ def sendTweet(origin, text):
 
 def messageGood(msg):
     # Check that a message is not a duplicate
-    curTime = time.time()
-    if msg not in messageLog:
-        return True
-    elif msg['time'] < curTime - timeout:
-        return True
-    else:
-        return False
+    for oldMsg in messageLog:
+        if oldMsg['text'] == msg['text'] and oldMsg['from'] == msg['from']:
+            if oldMsg['time'] < msg['time'] - timeout:
+                return True
+            else:
+                return False
+    return True
 
 
 def callback(packet):
@@ -65,6 +65,8 @@ def callback(packet):
                     messageLog.append(msg)
                     pickle.dump(messageLog, open('messageLog.data', 'wb'))
                     sendTweet(origin, text)
+                else:
+                    print('Duplicate message recieved.')
     except:
             print('error processing packet:')
             print(packet)
